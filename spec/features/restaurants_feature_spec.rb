@@ -83,5 +83,4 @@ feature 'restaurants' do
       expect(page).to have_content 'error'
     end
   end
-
 end
