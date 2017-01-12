@@ -11,16 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170111155956) do
+ActiveRecord::Schema.define(version: 20170112113133) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "ar_internal_metadata", primary_key: "key", force: :cascade do |t|
-    t.string   "value"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
 
   create_table "restaurants", force: :cascade do |t|
     t.string   "name"
@@ -31,14 +25,13 @@ ActiveRecord::Schema.define(version: 20170111155956) do
     t.integer  "user_id"
   end
 
-  add_index "restaurants", ["user_id"], name: "index_restaurants_on_user_id", using: :btree
-
   create_table "reviews", force: :cascade do |t|
     t.text     "thoughts"
     t.integer  "rating"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
     t.integer  "restaurant_id"
+    t.integer  "user_id"
   end
 
   add_index "reviews", ["restaurant_id"], name: "index_reviews_on_restaurant_id", using: :btree
@@ -65,4 +58,5 @@ ActiveRecord::Schema.define(version: 20170111155956) do
 
   add_foreign_key "restaurants", "users"
   add_foreign_key "reviews", "restaurants"
+  add_foreign_key "reviews", "users"
 end
