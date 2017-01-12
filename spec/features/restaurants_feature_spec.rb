@@ -18,11 +18,13 @@ feature 'restaurants' do
         fill_in('Password', with: 'testtest')
         fill_in('Password confirmation', with: 'testtest')
         click_button('Sign up')
-      Restaurant.create(name: 'KFC')
     end
 
     scenario 'display restaurants' do
       visit '/restaurants'
+      click_link 'Add a restaurant'
+      fill_in 'Name', with: 'KFC'
+      click_button 'Create Restaurant'
       expect(page).to have_content('KFC')
       expect(page).not_to have_content('No restaurants yet')
     end
@@ -67,13 +69,13 @@ feature 'restaurants' do
       click_button('Sign up')
     end
 
-    let!(:kfc){ Restaurant.create(name:'KFC') }
-
     scenario 'lets a user view a restaurant' do
+      click_link 'Add a restaurant'
+      fill_in 'Name', with: 'KFC'
+      click_button 'Create Restaurant'
       visit '/restaurants'
       click_link 'KFC'
       expect(page).to have_content 'KFC'
-      expect(current_path).to eq "/restaurants/#{kfc.id}"
     end
   end
 
@@ -89,9 +91,11 @@ feature 'restaurants' do
     end
 
 
-    before { Restaurant.create name: 'KFC', description: 'Deep fried goodness', id: 1 }
     scenario 'let a user edit a restaurant' do
       visit '/restaurants'
+      click_link 'Add a restaurant'
+      fill_in 'Name', with: 'KFC'
+      click_button 'Create Restaurant'
       click_link 'Edit KFC'
       fill_in 'Name', with: 'Kentucky Fried Chicken'
       fill_in 'Description', with: 'Deep fried goodness'
@@ -117,10 +121,12 @@ feature 'restaurants' do
     end
 
 
-    before { Restaurant.create name: 'KFC', description: 'Deep fried goodness' }
 
     scenario 'removes a restaurant when a user clicks a delete link' do
       visit '/restaurants'
+      click_link 'Add a restaurant'
+      fill_in 'Name', with: 'KFC'
+      click_button 'Create Restaurant'
       click_link 'Delete KFC'
       expect(page).not_to have_content 'KFC'
       expect(page).to have_content 'Restaurant deleted successfully'
