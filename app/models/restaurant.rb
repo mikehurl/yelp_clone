@@ -7,4 +7,5 @@ class Restaurant < ActiveRecord::Base
     review.user = user
     review
   end
+  
 end
