@@ -56,7 +56,27 @@ feature 'restaurants' do
       click_link 'Add a restaurant'
       expect(page).to have_content 'You need to sign in or sign up before continuing.'
     end
+
+    scenario 'is not valid with a name of less than three characters' do
+      visit '/restaurants'
+      click_link 'Add a restaurant'
+      fill_in 'Name', with: 'KF'
+      click_button 'Create Restaurant'
+      expect(page).to have_content('Name is too short')
+    end
+
+    scenario "is not valid unless it has a unique name" do
+      visit '/restaurants'
+      click_link 'Add a restaurant'
+      fill_in 'Name', with: "Moe's Tavern"
+      click_button 'Create Restaurant'
+      click_link 'Add a restaurant'
+      fill_in 'Name', with: "Moe's Tavern"
+      click_button 'Create Restaurant'
+      expect(page).to have_content('Name has already been taken')
+    end
   end
+  
 
   context 'viewing restaurants' do
 
@@ -103,7 +123,6 @@ feature 'restaurants' do
       click_link 'Kentucky Fried Chicken'
       expect(page).to have_content 'Kentucky Fried Chicken'
       expect(page).to have_content 'Deep fried goodness'
-      expect(current_path).to eq '/restaurants/1'
     end
 
   end
