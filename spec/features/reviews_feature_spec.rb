@@ -22,4 +22,24 @@ feature 'reviewing' do
     expect(page).to have_content("so so")
   end
 
+  def leave_review(thoughts, rating)
+    visit '/restaurants'
+    click_link 'Review KFC'
+    fill_in 'Thoughts', with: thoughts
+    select rating, from: 'Rating'
+    click_button 'Leave Review'
+  end
+
+  scenario 'displays an average rating for all reviews' do
+    leave_review('So so', '3')
+    click_link 'Sign out'
+    visit '/users/sign_up'
+    fill_in('Email', with: 'test2@example.com')
+    fill_in('Password', with: 'testtest')
+    fill_in('Password confirmation', with: 'testtest')
+    click_button('Sign up')
+    leave_review('Great', '5')
+    expect(page).to have_content('Average rating: ★★★★☆')
+  end
+
 end
