@@ -1,6 +1,7 @@
-describe 'restaurant validations' do
+require 'rails_helper'
 
-describe 'reviews' do
+RSpec.describe Restaurant, type: :model do
+  describe 'reviews' do
   describe 'build_with_user' do
 
     let(:user) { User.create email: 'test@test.com' }
@@ -17,5 +18,36 @@ describe 'reviews' do
       expect(review.user).to eq user
     end
   end
+end
+
+describe '#average_rating' do
+
+  context 'no reviews' do
+    it 'returns "N/A" when there are no reviews' do
+      restaurant = Restaurant.create(name: 'The Ivy')
+      expect(restaurant.average_rating).to eq 'N/A'
+    end
+  end
+
+  context '1 review' do
+  it 'returns that rating' do
+    User.create( id: 1, email: "test1@test.com", password: "test123")
+    restaurant = Restaurant.create!(name: 'The Ivy', user_id: 1)
+    restaurant.reviews.create(rating: 4, user_id: 1)
+    expect(restaurant.average_rating).to eq 4
+  end
+end
+
+context 'multiple reviews' do
+  it 'returns the average' do
+    User.create( id: 1, email: "test1@test.com", password: "test123")
+    User.create( id: 2, email: "test2@test.com", password: "test123")
+    restaurant = Restaurant.create(name: 'The Ivy', user_id: 1)
+    p restaurant
+    restaurant.reviews.create(rating: 1, user_id: 1)
+    restaurant.reviews.create(rating: 5, user_id: 2)
+    expect(restaurant.average_rating).to eq 3
+  end
+end
 end
 end

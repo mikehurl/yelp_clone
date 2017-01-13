@@ -6,6 +6,7 @@
     <h3><%= link_to "Review #{restaurant.name}", new_restaurant_review_path(restaurant) %>
       <% restaurant.reviews.each do |review| %>
       <br><%= review.thoughts %><br>
+      <h3><%="Average rating: #{star_rating(restaurant.average_rating)}"%>
       <% end %>
   <% end %>
 <% else %>
